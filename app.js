@@ -1,18 +1,23 @@
 'use strict';
 
 var express = require('express');
+var jsonParser = require('body-parser').json;
 var app = express();
 
-app.use(function(req, res, next){
-  req.myMessage = "The Leaves on the trees are:" + req.query.color
+// check if request body object has property named body
+var jsonCheck = function(req, res, next){
+  if(req.body){
+    console.log("the sky is", req.body.color)
+  } else {
+    console.log("error")
+  }
   next();
-});
+}
 
-// : denotes express paramater
-app.use('/different',function(req, res, next){
-  console.log(req.myMessage);
-  next();
-});
+// call json parser function through all middleware
+app.use(jsonCheck);
+app.use(jsonParser());
+app.use(jsonCheck);
 
 var port = process.env.PORT || 3000;
 
