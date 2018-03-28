@@ -4,13 +4,13 @@ var express = require('express');
 var app = express();
 
 app.use(function(req, res, next){
-  console.log("first middleware piece");
+  req.myMessage = "The Leaves on the trees are:" + req.query.color
   next();
 });
 
 // : denotes express paramater
-app.use('/different:id',function(req, res, next){
-  console.log("second middleware piece" + req.params.id);
+app.use('/different',function(req, res, next){
+  console.log(req.myMessage);
   next();
 });
 
