@@ -60,7 +60,15 @@ router.delete("/:qID/answers/:id", function (req, res) {
 
 // POST /questions/:qID/answers/:id/vote-:dir
 
-router.post("/:qID/answers/:id/vote-:dir", function (req, res) {
+router.post("/:qID/answers/:id/vote-:dir",function(req, res, next){
+  if(req.params.dir.search(/^(up|down)$/) === -1) {
+    var err = new Error("Not found vote dir rror");
+    err.status = 405;
+    next(err);
+  } else {
+    next();
+  }
+}, function (req, res) {
   res.json({
     response: "you send me a post request to /vote/-" + req.params.dir,
     questionId: req.params.qID,
