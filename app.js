@@ -2,22 +2,34 @@
 
 var express = require('express');
 var jsonParser = require('body-parser').json;
+var routes = require('./routes');
+var logger = require('morgan');
 var app = express();
 
-// check if request body object has property named body
-var jsonCheck = function(req, res, next){
-  if(req.body){
-    console.log("the sky is", req.body.color)
-  } else {
-    console.log("error")
-  }
-  next();
-}
-
 // call json parser function through all middleware
-app.use(jsonCheck);
+app.use(logger("dev"));
 app.use(jsonParser());
-app.use(jsonCheck);
+
+
+app.use('/questions', routes);
+
+// Middleware: catch 404 and forward Error
+app.use(function(req, res, next){
+  var err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+// Custom Erro Handlder
+app.use(function(err,req,res,next){
+  res.status(err.status || 500 );
+  res.json({
+    error: {
+      message: err.message
+    }
+  })
+})
+
 
 var port = process.env.PORT || 3000;
 
