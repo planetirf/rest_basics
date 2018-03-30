@@ -12,11 +12,11 @@ router.param("qID", function(req,res,next,id){
   Question.findById(id, function(err, doc) {
     if(err) return next(err);
     if(!doc) {
-      err = new Error("Not Found");
+      err = new Error("No Doc Found");
       err.status = 404;
       return next(err);
     }
-    req.question = json(doc);
+    req.question = doc;
     return next();
   });
 
@@ -32,7 +32,7 @@ router.param('id', function(req,res,next,id){
     return next(err);
   }
   next();
-})
+});
 // GET
 //GET /questions route handler
 router.get('/', function(req, res, next){
@@ -48,7 +48,7 @@ router.get('/', function(req, res, next){
   //   res.json(questions);
 
   Question.find({})
-              .{sort: {createdAt: -1}}
+              .sort({createdAt: -1})
               // chain additional method calls together .()
               // http://mongoosejs.com/docs/queries.html
               .exec(function(err,questions){
@@ -56,7 +56,7 @@ router.get('/', function(req, res, next){
                 res.json(questions);
               });
 });
-
+// return all the questions
 // router for creating questions
 router.post('/', function(req, res,next){
   var question = new Question(req.body);
@@ -67,8 +67,8 @@ router.post('/', function(req, res,next){
       // response w/ json question object
       res.json(question);
   });
-  // return all the questions
-  res.json({response: "you sent me a POST requestion", body: req.body});
+  // deleting this solved HEADERS overwrite bug.
+  // res.json({response: "you sent me a POST requestion", body: req.body});
 
 });
 

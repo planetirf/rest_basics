@@ -29,7 +29,7 @@ var AnswerSchema = new Schema({
   text: String,
   createdAt: {type: Date, default: Date.now},
   updatedAt: {type: Date, default: Date.now},
-  votes: {type: Number, default:0},
+  votes: {type: Number, default:0}
 });
 
 // instance methods
@@ -42,7 +42,7 @@ AnswerSchema.method('update',function(updates,callback){
   //this updates Object  and set fresh date pon updatedAt ass 3rd parame
   Object.assign(this, updates, {updatedAt: new Date()});
   this.parent().save(callback);
-)};
+});
 
 // vote instance method
 AnswerSchema.method('vote',function(vote,callback){
@@ -52,13 +52,12 @@ AnswerSchema.method('vote',function(vote,callback){
     this.votes += 1;
   }
   this.parent().save(callback);
-)};
-
+});
 
 
 var QuestionSchema = new Schema({
-  text: String,
-  createdAt: {type: Date, default: Date.},
+  text: {type: String, default: "no text set"},
+  createdAt: {type: Date, default: Date.now},
   answers: [AnswerSchema]
 
 });
